@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.BlogMapper">
+    <resultMap id="blogWithCatsTagsMap" type="blog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="LONGVARCHAR"/>
+        <result property="htmlContent" column="html_content" jdbcType="LONGVARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="readNum" column="read_num" jdbcType="INTEGER"/>
+        <result property="likeNum" column="like_num" jdbcType="INTEGER"/>
+        <result property="commentNum" column="comment_num" jdbcType="INTEGER"/>
+        <result property="firstPicture" column="first_picture" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="recommend" column="recommend" jdbcType="TINYINT"/>
+        <result property="shareStatement" column="share_statement" jdbcType="TINYINT"/>
+        <result property="publish" column="publish" jdbcType="TINYINT"/>
+        <result property="top" column="top" jdbcType="TINYINT"/>
+        <result property="appreciation" column="appreciation" jdbcType="TINYINT"/>
+        <result property="comment" column="comment" jdbcType="TINYINT"/>
+        <result property="flag" column="flag" jdbcType="TINYINT"/>
+        <result property="showStatus" column="show_status" jdbcType="TINYINT"/>
+        <association property="category" javaType="category" column="category_id">
+            <id property="id" column="cid" jdbcType="BIGINT"/>
+            <result property="name" column="cname" jdbcType="VARCHAR"/>
+            <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        </association>
+        <collection property="tags" ofType="tag">
+            <id property="id" column="tid" jdbcType="BIGINT"/>
+            <result property="name" column="tname" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <sql id="baseData">
+        b.id, b.title, b.content, b.html_content, b.user_id, b.category_id, b.description, b.read_num, b.like_num, b.comment_num, b.first_picture,
+        b.create_time, b.update_time, b.recommend, b.publish, b.appreciation, b.comment, b.flag, b.show_status, b.share_statement,
+        c.id as cid, c.name as cname, c.icon, t.id as tid, t.name as tname
+    </sql>
+
+    <sql id="baseColumn">
+        id, title, content, user_id, category_id, description, read_num, like_num, comment_num, first_picture,
+        create_time, update_time, recommend, publish, appreciation, comment, flag, show_status, share_statement
+    </sql>
+
+    <select id="getById" parameterType="Long" resultMap="blogWithCatsTagsMap">
+        select <include refid="baseData"/> from t_blog b
+        left outer join t_category c on b.category_id = c.id
+        left outer join t_blog_tag bt on b.id = bt.blog_id
+        left outer join t_tag t on bt.tag_id = t.id
+        where b.id = #{id};
+    </select>
+
+    <insert id="save" parameterType="blog" useGeneratedKeys="true" keyProperty="id">
+        insert into t_blog(title, user_id, category_id, content, html_content, description, read_num, like_num, comment_num,
+        first_picture, create_time, update_time, recommend, publish, appreciation, comment, share_statement, flag, show_status) values
+        (#{title}, #{userId}, #{categoryId}, #{content}, #{htmlContent}, #{description}, #{readNum}, #{likeNum}, #{commentNum},
+        #{firstPicture}, #{createTime}, #{updateTime}, #{recommend}, #{publish}, #{appreciation}, #{comment}, #{shareStatement},
+        #{flag}, #{showStatus})
+    </insert>
+
+    <update id="updateBlog" parameterType="blog">
+        update t_blog set title = #{title}, category_id = #{categoryId}, content = #{content}, html_content = #{htmlContent},
+        description = #{description}, first_picture = #{firstPicture}, update_time = #{updateTime}, recommend = #{recommend},
+        publish = #{publish}, appreciation = #{appreciation}, comment = #{comment}, share_statement = #{shareStatement}, flag = #{flag}
+        where id = #{id}
+    </update>
+
+    <resultMap id="blogMap" type="blog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="LONGVARCHAR"/>
+        <result property="htmlContent" column="html_content" jdbcType="LONGVARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="readNum" column="read_num" jdbcType="INTEGER"/>
+        <result property="likeNum" column="like_num" jdbcType="INTEGER"/>
+        <result property="commentNum" column="comment_num" jdbcType="INTEGER"/>
+        <result property="firstPicture" column="first_picture" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="recommend" column="recommend" jdbcType="TINYINT"/>
+        <result property="publish" column="publish" jdbcType="TINYINT"/>
+        <result property="shareStatement" column="share_statement" jdbcType="TINYINT"/>
+        <result property="appreciation" column="appreciation" jdbcType="TINYINT"/>
+        <result property="comment" column="comment" jdbcType="TINYINT"/>
+        <result property="flag" column="flag" jdbcType="TINYINT"/>
+        <result property="showStatus" column="show_status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!--前台首页显示的查询-->
+    <select id="selectPage" resultMap="blogMap">
+        select <include refid="baseColumn"/> from t_blog where publish = 1 and show_status = 1
+    </select>
+
+    <!--后台根据条件查询-->
+    <select id="selectPageByCondition" parameterType="map" resultMap="blogMap">
+        select <include refid="baseColumn"/> from t_blog
+        where 1 = 1
+        <if test="title != null and title != ''">
+            and title like concat ('%', #{title}, '%')
+        </if>
+        <if test="categoryId != null">
+            and category_id = #{categoryId}
+        </if>
+        <if test="recommend != null and recommend != false">
+            and recommend = #{recommend}
+        </if>
+        <if test="publish != null and publish != false">
+            and publish = #{publish}
+        </if>
+        <if test="flag != null and flag != false">
+            and flag = #{flag}
+        </if>
+        <if test="comment != null and comment != false">
+            and comment = #{comment}
+        </if>
+        <if test="shareStatement != null and shareStatement != false">
+            and share_statement = #{shareStatement}
+        </if>
+        <if test="appreciation != null and appreciation != false">
+            and appreciation = #{appreciation}
+        </if>
+    </select>
+
+    <update id="updateBoolValue" parameterType="cn.htz.blog.vo.BlogUpdateVo">
+        update t_blog
+        <set>
+            <if test="recommend != null">
+                recommend = #{recommend}
+            </if>
+            <if test="publish != null">
+                publish = #{publish}
+            </if>
+            <if test="flag != null">
+                flag = #{flag}
+            </if>
+            <if test="comment != null">
+                comment = #{comment}
+            </if>
+            <if test="shareStatement != null">
+                and share_statement = #{shareStatement}
+            </if>
+            <if test="appreciation != null">
+                appreciation = #{appreciation}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--逻辑删除博客-->
+    <update id="deleteByUpdateShowStatus" parameterType="long">
+        update t_blog set show_status = 0 where id = #{id}
+    </update>
+
+    <update id="updateShowStatusByIds" parameterType="list">
+        update t_blog set show_status = 0 where id in
+        <foreach collection="list" item="id" open=" ( " close=" ) " separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--查询博客侧边栏列表-->
+    <select id="findBlogListByType" parameterType="int" resultMap="blogMap">
+        select
+            <include refid="baseColumn"/>
+        from t_blog
+        where show_status = 1 and publish = 1
+        <if test="type != null and type == 0"> <!--最热博客-->
+            order by read_num desc
+        </if>
+        <if test="type != null and type == 1"> <!--最新博客-->
+            order by create_time desc
+        </if>
+        limit #{limit}
+    </select>
+
+    <select id="getBlogsPageByTagId" parameterType="long" resultMap="blogMap">
+        select
+            <include refid="baseColumn"/>
+        from t_blog
+        where id in (select blog_id from t_blog_tag where tag_id = #{tagId})
+        and show_status = 1 and publish = 1
+    </select>
+
+    <select id="getBlogsPageByKeyWord" parameterType="string" resultMap="blogMap">
+        select
+        <include refid="baseColumn"/>
+        from t_blog
+        where show_status = 1 and publish = 1
+        <if test="keyword != null">
+            AND (title like CONCAT('%',#{keyword},'%' ) or description like CONCAT('%',#{keyword},'%' ))
+        </if>
+    </select>
+
+    <select id="getCountByCid" parameterType="long" resultType="long">
+        select count(id) from t_blog where category_id = #{cid} and publish = 1 and show_status = 1
+    </select>
+
+    <update id="updateReadNumById" parameterType="long">
+        update t_blog set read_num = read_num + 1 where id = #{id}
+    </update>
+
+    <update id="updateCommentNumById" parameterType="long">
+        update t_blog set comment_num = comment_num + 1 where id = #{id}
+    </update>
+
+    <select id="findGroupYear" resultType="string">
+        select DATE_FORMAT(update_time, '%Y') as year FROM t_blog where publish = 1 and show_status = 1 GROUP BY year
+    </select>
+
+    <select id="findByYear" parameterType="string" resultMap="blogMap">
+        select <include refid="baseColumn"/> from t_blog
+        where DATE_FORMAT(update_time, '%Y') = #{year} and publish = 1 and show_status = 1
+    </select>
+
+    <select id="selectCount" resultType="long">
+        select count(id) from t_blog
+    </select>
+
+    <select id="getBlogsPageByCategoryId" parameterType="long" resultMap="blogMap">
+        select <include refid="baseColumn"/> from t_blog where category_id = #{categoryId}
+    </select>
+
+    <select id="selectTotalReadNum" resultType="long">
+        select IFNULL(sum(read_num),0) from t_blog
+    </select>
+
+    <select id="getBlogCommentTotal" resultType="long">
+        select IFNULL(sum(comment_num),0) from t_blog
+    </select>
+</mapper>

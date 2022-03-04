@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.UserMapper">
+    <resultMap id="userMap" type="user">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="baseUser">
+        id, username, email, phone, avatar, type, create_time, update_time
+    </sql>
+    <select id="selectListByKey" parameterType="string" resultMap="userMap">
+        select <include refid="baseUser"/> from t_user where 1 = 1
+        <if test="key != null">
+            and username like concat('%', #{key}, '%')
+            or email like concat('%', #{key}, '%')
+            or phone like concat('%', #{key}, '%')
+        </if>
+</select>
+
+    <select id="getById" parameterType="Long" resultMap="userMap">
+        select <include refid="baseUser"/> from t_user where id = #{id}
+    </select>
+
+    <select id="update" parameterType="user">
+        update t_user set username = #{username}, email = #{email}, avatar = #{avatar}, phone = #{phone},
+        update_time = #{updateTime} where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from t_user where id in
+        <foreach collection="list" item="id" open=" ( " close=" ) " separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAdminByUserNameAndPassword" parameterType="user" resultMap="userMap">
+        select id, username, email, phone, avatar, type from t_user where username = #{username} and password = #{password} and type = 1
+    </select>
+</mapper>

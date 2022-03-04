@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.CategoryMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="category" id="categoryMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="catLevel" column="cat_level" jdbcType="INTEGER"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="categoryMap">
+        select c.id, c.name, c.parent_id, c.cat_level, c.icon, count(b.id) blogCount from t_category c
+        left join t_blog b on c.id = b.category_id
+        group by c.id
+    </select>
+
+    <insert id="save" parameterType="category">
+        insert t_category values(null, #{name}, #{parentId}, #{catLevel}, #{icon})
+    </insert>
+
+    <select id="getById" parameterType="Long" resultMap="categoryMap">
+        select id, name, parent_id, cat_level, icon from t_category where id = #{id}
+    </select>
+
+    <select id="update" parameterType="category">
+        update t_category set name = #{name}, icon = #{icon} where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from t_category where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from t_category where id in
+        <foreach collection="list" item="id" open=" ( " close=" ) " separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getByName" parameterType="string" resultMap="categoryMap">
+        select id, name, parent_id, cat_level, icon from t_category where name = #{name}
+    </select>
+    
+    <select id="getLastCategoryList" resultMap="categoryMap">
+        select c.id, c.name, c.parent_id, c.cat_level, c.icon, count(b.id) blogCount from t_category c
+        left join t_blog b on c.id = b.category_id
+        where cat_level = 2
+        group by c.id
+    </select>
+
+    <select id="getCategoryCount" resultType="long">
+        select count(id) from t_category where cat_level = 2
+    </select>
+</mapper>

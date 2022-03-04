@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.MessageMapper">
+    <resultMap id="messageMap" type="message">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="parentMessageId" column="parent_message_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="messageType" column="message_type" jdbcType="TINYINT"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="replyInform" column="reply_inform" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        id, content, create_time, parent_message_id, message_type, reply_inform, email, username, avatar
+    </sql>
+
+    <select id="selectListByKey" parameterType="string" resultMap="messageMap">
+        select <include refid="baseColumn"/> from t_message where 1 = 1
+        <if test="key != null">
+            and content like concat('%', #{key}, '%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectMaxLevelMessagesByKey" parameterType="string" resultMap="messageMap">
+        select <include refid="baseColumn"/> from t_message where parent_message_id = 0
+        <if test="key != null">
+            and content like concat('%', #{key}, '%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        delete from t_message where id = #{id}
+    </delete>
+
+    <delete id="deleteBatchByIds" parameterType="list">
+        delete from t_message where id in
+        <foreach collection="list" item="id" open=" ( " close=" ) " separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="save" parameterType="message">
+        insert into t_message (id, content, reply_inform, parent_message_id, create_time, message_type, avatar, email, username)
+        values (#{id}, #{content}, #{replyInform}, #{parentMessageId}, #{createTime}, #{messageType}, #{avatar}, #{email}, #{username})
+    </insert>
+
+    <select id="getCountMessages" resultType="long">
+        select count(id) from t_message;
+    </select>
+</mapper>

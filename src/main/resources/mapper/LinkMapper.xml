@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.LinkMapper">
+    <resultMap id="linkMap" type="link">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="link_url" property="linkUrl" jdbcType="VARCHAR"/>
+        <result column="link_name" property="linkName" jdbcType="VARCHAR"/>
+        <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="show_status" property="showStatus" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        id, link_url, link_name, picture_url, create_time, description, type, show_status
+    </sql>
+
+    <select id="selectListByKey" parameterType="string" resultMap="linkMap">
+        select <include refid="baseColumn"/> from t_link where 1 = 1
+        <if test="key != null">
+            and link_name like concat('%', #{key}, '%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="link">
+        insert into t_link(id, link_url, link_name, picture_url, description, show_status, create_time, type)
+        values (#{id}, #{linkUrl}, #{linkName}, #{pictureUrl}, #{description}, #{showStatus}, #{createTime}, #{type})
+    </insert>
+
+    <select id="getById" parameterType="long" resultMap="linkMap">
+        select <include refid="baseColumn"/> from t_link where id = #{id}
+    </select>
+
+    <update id="update" parameterType="link">
+        update t_link set link_name = #{linkName}, link_url = #{linkUrl}, description = #{description},
+        picture_url = #{pictureUrl}, show_status = #{showStatus}, type = #{type} where id = #{id}
+    </update>
+
+    <delete id="updateShowStatusById" parameterType="long">
+        update t_link set show_status = 0 where id = #{id}
+    </delete>
+
+    <delete id="updateShowStatusByIds" parameterType="list">
+        update t_link set show_status = 0 where id in
+        <foreach collection="list" open=" ( " separator="," close=" ) " item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

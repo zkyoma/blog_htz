@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.htz.blog.mapper.CommentMapper">
+    <resultMap id="commentMap" type="comment">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
+        <result property="parentCommentId" column="parent_comment_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="commentatorType" column="commentator_type" jdbcType="TINYINT"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        id, content, blog_id, create_time, parent_comment_id, commentator_type, email, username, avatar
+    </sql>
+
+    <select id="selectListByKey" parameterType="string" resultMap="commentMap">
+        select <include refid="baseColumn"/> from t_comment where 1 = 1
+        <if test="key != null">
+            and content like concat('%', #{key}, '%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectMaxLevelCommentsByKey" parameterType="string" resultMap="commentMap">
+        select <include refid="baseColumn"/> from t_comment where parent_comment_id = 0
+        <if test="key != null">
+            and content like concat('%', #{key}, '%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="getCommentsByBlogId" parameterType="long" resultMap="commentMap">
+        select <include refid="baseColumn"/> from t_comment where blog_id = #{blogId} order by create_time desc
+    </select>
+
+    <select id="getMaxLevelCommentsByBlogId" parameterType="long" resultMap="commentMap">
+        select
+            <include refid="baseColumn"/>
+        from
+            t_comment
+        where
+            blog_id = #{blogId} and parent_comment_id = 0 order by create_time desc
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        delete from t_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from t_comment where id in
+        <foreach collection="list" item="id" open=" ( " close=" ) " separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="save" parameterType="comment">
+        insert into t_comment (id, content, blog_id, parent_comment_id, create_time, commentator_type, avatar, email, username)
+        values (#{id}, #{content}, #{blogId}, #{parentCommentId}, #{createTime}, #{commentatorType}, #{avatar}, #{email}, #{username})
+    </insert>
+</mapper>

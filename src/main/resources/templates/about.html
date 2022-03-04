@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head  th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BraveCoder | 关于我</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+  <link rel="stylesheet" href="../static/css/markdown.css" th:href="@{/css/markdown.css}">
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(6)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui blue header item">Blog</h2>
+        <a href="#" class=" m-item item m-mobile-hide"><i class="mini home icon"></i>首页</a>
+        <a href="#" class=" m-item item m-mobile-hide"><i class="mini idea icon"></i>分类</a>
+        <a href="#" class="m-item item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+        <a href="#" class="m-item item m-mobile-hide"><i class="mini clone icon"></i>归档</a>
+        <a href="#" class="active m-item item m-mobile-hide"><i class="mini info icon"></i>关于我</a>
+        <div class="right m-item item m-mobile-hide">
+          <div class="ui icon inverted transparent input m-margin-tb-tiny">
+            <input type="text" placeholder="Search....">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <!--中间内容-->
+  <!--<div  class="m-container m-padded-tb-big animated fadeIn m-opacity">-->
+  <!--  <div class="ui container">-->
+
+  <!--    <div class="ui stackable grid">-->
+  <!--      <div class="eleven wide column">-->
+  <!--        <div class="ui segment">-->
+  <!--          <img style="margin: 0 auto;" src="http://cdn.xiongsihao.com/info_avatar.png" alt="" class="ui rounded image ">-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="five wide column">-->
+  <!--        <div class="ui top attached segment">-->
+  <!--          <div class="ui header">关于我</div>-->
+  <!--        </div>-->
+  <!--        <div class="ui attached segment">-->
+  <!--          <p class="m-text">全栈才能生存</p>-->
+  <!--          <p class="m-text">blog 记录....</p>-->
+  <!--        </div>-->
+  <!--        <div class="ui attached segment">-->
+  <!--          <div class="ui blue basic left pointing label">编程</div>-->
+  <!--          <div class="ui blue basic left pointing label">游戏</div>-->
+  <!--          <div class="ui blue basic left pointing label">思考</div>-->
+  <!--          <div class="ui blue basic left pointing label">.....</div>-->
+  <!--        </div>-->
+  <!--        <div class="ui attached segment">-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">Java</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">JavaScript</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">Node</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">Spring</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">redis</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">MYSQL</div>-->
+  <!--          <div class="ui blue basic left pointing label m-margin-tb-tiny">...</div>-->
+  <!--        </div>-->
+  <!--        <div class="ui bottom attached segment">-->
+  <!--          <a href="#" class="ui github circular icon button" data-content="https://github.com/xiongsihao" data-position="bottom center"><i class="github icon"></i></a>-->
+  <!--          <a href="#" class="ui wechat circular icon button" data-content="17879570610" data-position="bottom center"><i class="weixin icon"></i></a>-->
+  <!--          <a href="#" class="ui qq circular icon button" data-content="2668028614" data-position="bottom center"><i class="qq icon"></i></a>-->
+  <!--        </div>-->
+
+  <!--        <div class="ui wechat-qr flowing popup transition hidden">-->
+  <!--          <img src="../images/wechat.jpg" alt="" class="ui rounded image" style="width: 110px">-->
+  <!--        </div>-->
+  <!--        </div>-->
+  <!--    </div>-->
+
+  <!--  </div>-->
+  <!--</div>-->
+
+  <!--个人资料描述-->
+  <div class="ui container m-opacity box-shadow-max about-text">
+    <div class="m-margin-top-large" align="center">
+      <img class="ui user_avatar" align="center" th:src="@{/images/user2.jpeg}">
+    </div>
+    <div class="m-margin-top-small" style="font-size: x-large;font-family: STSong;color: white" align="center">BraveCoder</div>
+    <div class="m-margin-top" align="center">
+      <a href="#" class="ui wechat circular icon button"><i class="weixin icon"></i></a>
+      <a href="#" class="ui qq circular icon button" data-content="316392836" data-position="bottom center"><i class="qq icon"></i></a>
+      <a href="https://github.com/htqxs/" target="_blank" class="ui github circular icon button" data-content="点击跳转GitHub" data-position="bottom center"><i class="github icon"></i></a>
+      <a href="https://blog.csdn.net/qq_30494771" target="_blank" class="ui csdn circular icon button" data-content="点击跳转CSDN" data-position="bottom center"><i class="copyright outline icon"></i></a>
+      <a href="#" class="ui email circular icon button" data-content="zhangzhihtz@gmail.com" data-position="bottom center"><i class="envelope  icon"></i></a>
+    </div>
+    <div class="ui segment m-margin-">
+
+      <div class="ui wechat-qr flowing popup transition hidden">
+        <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded image" style="width: 110px">
+        <div align="center">微信</div>
+      </div>
+      <div class="ui qq-qr flowing popup transition hidden">
+        <img src="../static/images/qq.png" th:src="@{/images/qq.png}" alt="" class="ui rounded image" style="width: 110px">
+        <div align="center">QQ</div>
+      </div>
+      <!--<hr class="m-margin-top-small" style="width: 30%">-->
+      <br>
+      <div align="center">
+        <p>99年</p>
+        <p>在校大三学生</p>
+        <p>计算机科学与技术专业</p>
+        <p>一名java小菜鸡</p>
+        <p>“世界上有个很可爱的人，现在这个人正在看这句话”</p>
+      </div>
+      <hr class="m-margin-top-large">
+      <h2 align="center" class="m-opacity">关于本站</h2>
+      <div >
+        <p><b>简介</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          BraveCoder's Blog是由我个人开发的一个博客网站。后端使用的是SpringBoot+Mybatis，前端中的后台管理页面使用的是vue中的
+          Element-Ui 框架，并在<a href="https://github.com/lin-xin/vue-manage-system">vue-manage-system</a>基础上加以改进；前台页面使用thymeleaf模板引擎，并使用Semantic UI框架加以优化。
+        </p>
+        <p><b>最初想法</b>
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          之前在网上看到许多大佬搭建的个人博客，感觉搭一个自己的博客也是件不错的事情，后期也可以把自己的学习笔记、经验放到上面。最初想的是使用vue和springboot搭建一个前后端分离的个人博客项目，前端页面找个合适的模板加以改进，后端自己编写。
+        </p>
+        <p><b>第一阶段</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          趁着国庆假期，便开始着手准备了。首先从后台管理开始，在网上查了很多资料，最后选择了一个使用Element-Ui开发的一个开源的后台管理页面，于是乎赶紧clone下来，在次基础上加以改进。然而。。。
+          有些东西虽然看起来简单，但全部都交给自己做的话，错误百出，更何况自己水平有限，来来回回的bug调起来麻烦死了。。。国庆一个假期才勉强搞一个后台管理，并且还不是特别完善。</p>
+        <p><b>第二阶段</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          国庆回来之后，赶紧把后台管理稍微优化了下，想赶紧干前台页面，在github上clone了好多博客系统，好不容易找到合适的vue前台页面，发现自己跑不起来，里面结合了其他框架，而这些我都没有了解过。。。搞了好久，没有找到合适的，自己从头开始写，又不太现实。
+        一想，花在这上面的时间已经很久了，要不算了，博客系统暂时不搞了。。。
+        </p>
+        <p><b>第三阶段</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          其他的事忙完后，已经快20号了。想到博客系统还没搞定，心里还是有点不得劲。为了节省时间，前台页面就直接使用了Thymeleaf，在别人博客页面的基础上做了些许改动。由于写后台管理后端代码已经写的差不多了，所以前台功能也很快就成型了。
+       <br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          前台页面主要参考了两位老哥<a href="https://onestar.newstar.net.cn/"> onestar </a>和<a href="http://xiongsihao.com/"> XSH </a>的个人博客，在这里感谢二位，帮了大忙。
+        </p>
+        <p><b>功能改进</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         友链管理、照片墙、邮箱绑定、第三方登录（github）等，这些暂时不再完善，后期有时间再做考虑。
+        </p>
+      </div>
+      <!--<h2 class="m-margin-tb-tiny" style="font-size: xx-large;font-weight: bold;color: #F08047;font-family: STSong">打赏本站</h2>-->
+      <!--<div class="ui orange basic label m-margin-tb-tiny">-->
+      <!--  <p style="font-size: medium">每一次提笔的我们，就像街边的街头艺人，用笔唱着自己的歌谣。如果有一天你感动了，那么期待您请我们来一杯咖啡</p>-->
+      <!--</div>-->
+      <!--<div class="ui orange basic label">-->
+      <!--  <div class="ui images" style="font-size: inherit !important;">-->
+      <!--    <div class="image">-->
+      <!--      <img src="../static/images/zhifupay.jpg" th:src="@{/images/zhifupay.jpg}" alt="" class="ui rounded bordered image" style="width: 180px">-->
+      <!--      <div>支付宝</div>-->
+      <!--    </div>-->
+      <!--    <div class="image">-->
+      <!--      <img src="../static/images/wechatpay.jpg" th:src="@{/images/wechatpay.jpg}" alt="" class="ui rounded bordered image" style="width: 180px">-->
+      <!--      <div>微信</div>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--</div>-->
+      <!--<div class="hiddenDiv"></div>-->
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+  </footer>
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    // 显示微信
+    $('.wechat').popup({
+      popup : $('.wechat-qr'),
+      position: 'bottom center'
+    });
+
+    // 显示QQ
+    $('.qq').popup({
+      popup : $('.qq-qr'),
+      position: 'bottom center'
+    });
+
+    // 显示邮箱
+    $('.email').popup();
+
+    // 显示CSDN
+    $('.csdn').popup();
+
+    // 显示github
+    $('.github').popup();
+
+  </script>
+</body>
+</html>
